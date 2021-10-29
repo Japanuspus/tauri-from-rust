@@ -1,6 +1,7 @@
 {
     "build": {
-      "distDir": "dist"
+      "distDir": "dist",
+      "withGlobalTauri": true
     },
     "tauri": {
       "bundle": {

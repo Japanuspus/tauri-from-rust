@@ -20,8 +20,22 @@
             align-items: center;
         }
     </style>
+    <script>
+        // With the Tauri global script, enabled when `tauri.conf.json > build > withGlobalTauri` is set to true:
+        const invoke = window.__TAURI__.invoke;
+    </script>
 </head>
 <body>
-<h1>Hello, Tauri!</h1>
+<h1>Hello, rusty world!</h1>
+<input type="text" id="input-text">
+<input type="button" value="Submit" id="input-button">
+<script>
+    invoke('my_custom_command');
+    document.getElementById("input-button").onclick = (ev) => {
+        var inputText=document.getElementById("input-text").value;
+	    console.log('Clicked: '+inputText);
+        invoke("elaborate_command", {"message": inputText});
+    }
+</script>
 </body>
 </html>
