@@ -24,6 +24,8 @@ In addition, [tauri] provides js-interfaces to backend functionality. This is no
 - [ ] Demonstrate signal from rust to js
 - [ ] Demonstrate tray icon
 - [ ] Demonstrate global hotkey
+- [ ] Demonstrate custom protocol
+- [ ] Set up CI on github
 
 [rust]: https://www.rust-lang.org/
 [tauri]: https://tauri.studio/en/
