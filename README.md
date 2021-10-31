@@ -17,11 +17,16 @@ Compared to using [webview] directly, [tauri] adds some complexity and a lot of 
 
 In addition, [tauri] provides js-interfaces to backend functionality. This is not something that I will explore in this project.
 
+### Running
+Install the [rust] toolchain, then
+
+    cargo run
+
 ### TODO
 
 - [x] Demonstrate a "Hello world"-application
-- [ ] Demonstrate call from js (front-end) to rust (back-end)
-- [ ] Demonstrate signal from rust to js
+- [x] Demonstrate call from js (front-end) to rust (back-end)
+- [x] Demonstrate signal from rust to js
 - [ ] Demonstrate tray icon
 - [ ] Demonstrate global hotkey
 - [ ] Demonstrate custom protocol
