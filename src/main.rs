@@ -22,7 +22,7 @@ fn elaborate_command(
   state: tauri::State<'_, MyState>,
 ) -> Result<CustomResponse, String> {
     println!("Called from {} with message \"{}\"", window.label(), &message);
-    // state.count+=1;  // wrap in mutex for mutability
+    // state.count+=1;  // wrap in mutex for mutability, see https://github.com/tauri-apps/tauri/blob/next/examples/state/src-tauri/src/main.rs
     Ok(CustomResponse{message, other_val: state.count})
 }
 
