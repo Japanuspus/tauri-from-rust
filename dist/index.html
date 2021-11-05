@@ -48,5 +48,13 @@
     // let send_w_map = tauri_window.emit('my-event', {message: "From tauri", other_val: 7});
     let send_w = tauri_window.emit('my-event', "simple message");
 </script>
+<script>
+    // custom protocol
+    fetch('example://foobar')
+      .then(response => response.json())
+      .then(data => {console.log('got myprotocol response'); console.log({data});})
+      .catch((error) => console.error('Error:', error));
+</script>
+
 </body>
 </html>
