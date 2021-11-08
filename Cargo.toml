@@ -13,6 +13,10 @@ tauri-build = "1.0.0-beta.4"
 tauri = { version = "1.0.0-beta.8", features = ["custom-protocol"] }
 serde = "1.0"
 
+[features]
+custom-protocol = [ "tauri/custom-protocol" ]
+default = [ "custom-protocol" ]
+
 # Make --release build a binary that is small (opt-level = "s") and fast (lto = true).
 # This is completely optional, but shows that testing the application as close to the
 # typical release settings is possible. Note: this will slow down compilation.
