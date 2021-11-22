@@ -38,12 +38,12 @@
     }
 </script>
 <script>
-    // listening to events -- winow also receives global events
+    // listening to events from backend -- window receives both local and global events
     let tauri_window = tauri.window.getCurrent();
     let listen_w = tauri_window.listen("my-event", event => {console.log("Window event: "+event.payload.message+" #"+event.payload.other_val);});
     let listen_g = tauri.event.listen("my-event", event => {console.log("Global event: "+event.payload.message+" #"+event.payload.other_val);});
     
-    // Emitting events
+    // Emitting events from frontend
     // Does not appear to work as intended: Emitting a map fails?
     // let send_w_map = tauri_window.emit('my-event', {message: "From tauri", other_val: 7});
     let send_w = tauri_window.emit('my-event', "simple message");
