@@ -34,7 +34,7 @@ Install the [rust] toolchain, then
 - [x] Demonstrate signal from rust to js
 - [ ] Demonstrate custom protocol
 - [ ] Demonstrate tray icon
-- [ ] Demonstrate global hotkey
+- [x] Demonstrate global hotkey
 - [ ] Set up CI on github
 
 [rust]: https://www.rust-lang.org/

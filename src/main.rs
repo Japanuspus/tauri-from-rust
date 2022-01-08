@@ -1,4 +1,4 @@
-use tauri::{AppHandle, Manager, Window, http}; 
+use tauri::{AppHandle, Manager, Window, http, GlobalShortcutManager}; 
 
 // Wrap in mutex for mutability:
 // https://docs.rs/tauri/1.0.0-beta.8/tauri/struct.Builder.html#mutability
@@ -25,18 +25,19 @@ fn elaborate_command(
   state: tauri::State<'_, MyState>,
 ) -> Result<CustomResponse, String> {
     println!("Called from {} with message \"{}\"", window.label(), &message);
+    window.emit("my-event", CustomResponse {message: format!("Backend received: {}", &message), other_val: 0}).unwrap();
 
     // state.count+=1;  // wrap in mutex for mutability, see above
     Ok(CustomResponse{message, other_val: state.count})
 }
 
 fn window_pinger(window: Window) {
-  let mut i:usize=0;
+  let mut i:u64=0;
   loop {
-    window.emit("my-event", CustomResponse { message: "Message from backend".into(), other_val: i}).unwrap();
+    window.emit("my-event", CustomResponse { message: "Tick from backend".into(), other_val: i as usize}).unwrap();
     println!("Emitting my-event to window - {}.", i);
-    i+=1;
-    std::thread::sleep(std::time::Duration::from_secs(1));
+    std::thread::sleep(std::time::Duration::from_secs(i+1));
+    i=(i+1)%60;
   }
 }
 
@@ -51,6 +52,11 @@ fn my_protocol(_app: &AppHandle, _request: &http::Request) ->  Result<http::Resp
 }
 
 
+fn hotkey_callback(app: &AppHandle) {
+  app.emit_all("string-event", "Hotkey pressed");
+  println!("Global hotkey pressed");
+}
+
 fn main() {
     let state = MyState{count: 0};
     // docs at https://docs.rs/tauri/1.0.0-beta.8/tauri/struct.Builder.html
@@ -60,6 +66,10 @@ fn main() {
           // The `.get_window`-method is part of the `Manager`-trait
           let main_window = app.get_window("main").unwrap();
           std::thread::spawn(move || window_pinger(main_window));
+          let mut shortcut_manager = app.global_shortcut_manager();
+          let app_handle = app.handle();
+          let handler = move || hotkey_callback(&app_handle);
+          std::thread::spawn(move || shortcut_manager.register("COMMANDORCONTROL+SHIFT+3", handler));
           Ok(())
         })
         // does not appear to be working on windows for 1.0.0beta8

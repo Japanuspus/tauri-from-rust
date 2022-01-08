@@ -5,19 +5,30 @@
     <title>Hello Tauri!</title>
     <style>
         body {
-            /* Add a nice colorscheme */
+            /* Add  colorscheme */
             background-color: #222831;
             color: #ececec;
 
             /* Make the body the exact size of the window */
             margin: 0;
+            padding: 0;
             height: 100vh;
             width: 100vw;
 
-            /* Vertically and horizontally center children of the body tag */
+            
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            
+        }
+        article {
+            border: thin solid gray;
+            border-radius: 0.1rem;
+            margin-top: 1rem;
+            padding: 0.5rem;
+        }
+        article:first-child {
+            margin-top: 0;
         }
     </style>
     <script>
@@ -27,33 +38,56 @@
 </head>
 <body>
 <h1>Hello, rusty world!</h1>
-<input type="text" id="input-text">
-<input type="button" value="Submit" id="input-button">
+<p>Press Shift+Ctrl/Cmd+3 to test global shortcut</p>
+<article>
+    <input type="text" id="input-text">
+    <input type="button" value="Run elaborate command" id="elaborate-command">    
+</article>
+<article>
+    <input type="button" value="Emit event" id="emit-event">    
+    <input type="button" value="Custom protocol fetch" id="custom-protocol">    
+</article>
+<article>
+    <pre id="terminal"></pre>
+</article>
 <script>
-    tauri.invoke('my_custom_command');
-    document.getElementById("input-button").onclick = (ev) => {
-        var inputText=document.getElementById("input-text").value;
-	    console.log('Clicked: '+inputText);
-        invoke("elaborate_command", {"message": inputText});
-    }
-</script>
-<script>
+    const term = document.getElementById("terminal");
+    const disp = (msg) => {
+        console.log(msg);
+        term.innerText=msg+"\n"+term.innerText;
+    };
     // listening to events from backend -- window receives both local and global events
     let tauri_window = tauri.window.getCurrent();
-    let listen_w = tauri_window.listen("my-event", event => {console.log("Window event: "+event.payload.message+" #"+event.payload.other_val);});
-    let listen_g = tauri.event.listen("my-event", event => {console.log("Global event: "+event.payload.message+" #"+event.payload.other_val);});
-    
+    let listen_w = tauri_window.listen("my-event", event => {disp("Window event: "+event.payload.message+" #"+event.payload.other_val);});
+    let listen_ws = tauri_window.listen("string-event", event => {disp("Window string event: "+event.payload);});
+    // let listen_g = tauri.event.listen("my-event", event => {disp("Global event: "+event.payload.message+" #"+event.payload.other_val);});
+
+
+    tauri.invoke('my_custom_command');
+    document.getElementById("elaborate-command").onclick = (ev) => {
+        var inputText=document.getElementById("input-text").value;
+	    //disp('Clicked: '+inputText);
+        tauri.invoke("elaborate_command", {"message": inputText});
+    }
+
     // Emitting events from frontend
-    // Does not appear to work as intended: Emitting a map fails?
+    // Does not appear to work as intended: Emitting a map fails with error ... expected a string
     // let send_w_map = tauri_window.emit('my-event', {message: "From tauri", other_val: 7});
-    let send_w = tauri_window.emit('my-event', "simple message");
-</script>
-<script>
-    // custom protocol
-    fetch('example://foobar')
-      .then(response => response.json())
-      .then(data => {console.log('got myprotocol response'); console.log({data});})
-      .catch((error) => console.error('Error:', error));
+    document.getElementById("emit-event").onclick = (ev) => {
+        var inputText=document.getElementById("input-text").value;
+        // Does not appear to work as intended: Emitting a map fails with error ... expected a string
+        //tauri_window.emit('my-event', {message: "From tauri", other_val: 7});
+        tauri_window.emit('string-event', inputText);
+    }
+
+    // Fetch on custom protocol
+    document.getElementById("custom-protocol").onclick = (ev) => {
+        //var inputText=document.getElementById("input-text").value;
+        fetch('example://foobar')
+        .then(response => response.json())
+        .then(data => {disp('Protocol response'); console.log({data});})
+        .catch((error) => console.error('Error:', error));
+    };
 </script>
 
 </body>
