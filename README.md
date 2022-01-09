@@ -33,7 +33,7 @@ Install the [rust] toolchain, then
 - [x] Demonstrate call from js (front-end) to rust (back-end)
 - [x] Demonstrate signal from rust to js
 - [ ] Demonstrate custom protocol
-- [ ] Demonstrate tray icon
+- [x] Demonstrate tray icon
 - [x] Demonstrate global hotkey
 - [ ] Set up CI on github
 

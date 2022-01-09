@@ -10,7 +10,7 @@ tauri-build = "1.0.0-beta.4"
 
 # The actual Tauri dependency, along with `custom-protocol` to serve the pages.
 [dependencies]
-tauri = { version = "1.0.0-beta.8", features = ["custom-protocol"] }
+tauri = { version = "1.0.0-beta.8", features = ["system-tray"] }
 serde = "1.0"
 
 [features]
