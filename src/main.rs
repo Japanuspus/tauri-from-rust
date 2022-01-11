@@ -44,7 +44,8 @@ fn window_pinger(window: Window) {
 
 // https://github.com/tauri-apps/wry/blob/dev/examples/custom_protocol.rs
 // https://docs.rs/tauri/1.0.0-beta.8/tauri/struct.Builder.html#method.register_uri_scheme_protocol
-fn my_protocol(_app: &AppHandle, _request: &http::Request) ->  Result<http::Response, Box<dyn std::error::Error>>  {
+fn my_protocol(_app: &AppHandle, request: &http::Request) ->  Result<http::Response, Box<dyn std::error::Error>>  {
+  println!("Custom protocol handler called: {:?}", &request);
   http::ResponseBuilder::new()
   .status(202)
   .mimetype("application/json")
